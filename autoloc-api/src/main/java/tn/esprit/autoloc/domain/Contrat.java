@@ -9,6 +9,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.math.BigDecimal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "contrat")
 @Getter
@@ -27,4 +30,14 @@ public class Contrat {
     private BigDecimal montantTotal;
 
     private boolean valide;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_reservation",
+            nullable = false, unique = true)
+    private Reservation reservation;
+
+    @OneToMany(mappedBy = "contrat",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<Paiement> paiements = new ArrayList<>();
 }
