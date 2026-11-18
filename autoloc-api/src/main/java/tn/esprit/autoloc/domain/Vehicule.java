@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "vehicule")
 @Getter
@@ -42,13 +45,19 @@ public class Vehicule {
     @Column(nullable = false, length = 20)
     private StatutVehicule statut;
 
+    @JsonIgnoreProperties({
+            "vehicules", "employes",
+            "hibernateLazyInitializer", "handler"
+    })
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_agence", nullable = false)
     private Agence agence;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
     private List<Maintenance> maintenances = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "vehicule_equipement",
@@ -57,6 +66,7 @@ public class Vehicule {
     )
     private List<Equipement> equipements = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
 }
